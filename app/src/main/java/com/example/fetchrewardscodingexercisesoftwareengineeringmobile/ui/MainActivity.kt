@@ -1,4 +1,4 @@
-package com.example.fetchrewardscodingexercisesoftwareengineeringmobile
+package com.example.fetchrewardscodingexercisesoftwareengineeringmobile.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
