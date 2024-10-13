@@ -1,5 +1,6 @@
 package com.example.fetchrewardscodingexercisesoftwareengineeringmobile.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fetchrewardscodingexercisesoftwareengineeringmobile.model.ListItem
@@ -17,37 +18,23 @@ class FetchViewModel @Inject constructor(
     private val _listItems = MutableStateFlow<List<ListItem>>(emptyList())
     val listItems: StateFlow<List<ListItem>> = _listItems
 
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage
+
     init {
         fetchListItems()
     }
 
-    private fun fetchListItems() {
+    fun fetchListItems() {
         viewModelScope.launch {
-            val items = repository.getListItems()
-            _listItems.value = items
+            try {
+                val items = repository.getListItems()
+                _listItems.value = items
+                _errorMessage.value = null // Clear any previous errors
+            } catch (e: Exception) {
+                Log.e("FetchViewModel", "Error fetching list items", e)
+                _errorMessage.value = "Failed to load data. Please try again."
+            }
         }
     }
 }
-
-
-//@HiltViewModel
-//class FetchViewModel @Inject constructor(private val repository: FetchRepository) : ViewModel() {
-//
-//    private val _listItems = MutableStateFlow<List<ListItem>>(emptyList())
-//    val listItems: StateFlow<List<ListItem>> = _listItems
-//
-//    init {
-//        fetchListItems()
-//    }
-//
-//    private fun fetchListItems() {
-//        viewModelScope.launch {
-//            try {
-//                val items = repository.getListItems()
-//                _listItems.value = items
-//            } catch (e: Exception) {
-//                // Handle error
-//            }
-//        }
-//    }
-//}
