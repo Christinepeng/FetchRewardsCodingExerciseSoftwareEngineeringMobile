@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+//    id ("dagger.hilt.android.plugin")
 }
 
 android {
@@ -73,6 +74,9 @@ dependencies {
     // Hilt for Dependency Injection
     implementation(libs.hilt.android.v2511)
     kapt(libs.hilt.android.compiler.v2511)
+
+    implementation (libs.androidx.hilt.navigation.compose)
+
 
     // Coroutines
     implementation (libs.kotlinx.coroutines.core)
