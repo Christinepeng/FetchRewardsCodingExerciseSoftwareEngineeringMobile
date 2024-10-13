@@ -6,13 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -84,31 +87,42 @@ fun FetchListScreen(
             }
         }
     } else {
-        // Display the list as before
+        // Display the list with horizontally scrollable rows
         LazyColumn(modifier = modifier) {
-            listItems.groupBy { it.listId }.forEach { (listId, items) ->
+            listItems.groupBy { it.listId }.forEach { (listId, itemsForListId) ->
                 item {
                     Text(
-                        text = "List ID: $listId",
+                        text = "List ID No: $listId",
                         style = MaterialTheme.typography.headlineSmall,
                         modifier = Modifier.padding(8.dp)
                     )
                 }
-                items(items) { listItem ->
-                    ListItemRow(listItem)
+                item {
+                    LazyRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Start,
+                        contentPadding = PaddingValues(horizontal = 8.dp)
+                    ) {
+                        items(itemsForListId) { listItem ->
+                            ListItemCard(item = listItem)
+                        }
+                    }
                 }
             }
         }
     }
 }
 
-
-
 @Composable
-fun ListItemRow(item: ListItem) {
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(8.dp)) {
-        Text(text = item.name ?: "No Name", style = MaterialTheme.typography.bodyLarge)
+fun ListItemCard(item: ListItem) {
+    Column(
+        modifier = Modifier
+            .padding(8.dp)
+            .width(150.dp), // Adjust the width as needed
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "Id: ${item.id}", style = MaterialTheme.typography.bodyMedium)
+        Text(text = "Name: ${item.name ?: "No Name"}", style = MaterialTheme.typography.bodyLarge)
+        Text(text = "List ID: ${item.listId}", style = MaterialTheme.typography.bodySmall)
     }
 }
