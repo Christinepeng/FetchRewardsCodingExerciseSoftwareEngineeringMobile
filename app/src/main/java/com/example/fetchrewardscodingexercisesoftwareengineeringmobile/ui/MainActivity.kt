@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,8 +18,9 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -62,6 +62,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @Composable
 fun FetchListScreen(
     listItems: List<ListItem>,
@@ -69,7 +70,9 @@ fun FetchListScreen(
     onRetry: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val selectedOption = remember { mutableStateOf(1) } // Default to option 1
+    // Remember states for switches
+    val isSortByNameEnabled = remember { mutableStateOf(false) }
+    val isFilterBlanksEnabled = remember { mutableStateOf(false) }
 
     if (errorMessage != null) {
         // Display the error message with a Retry button (same as before)
@@ -93,53 +96,62 @@ fun FetchListScreen(
         }
     } else {
         Column(modifier = modifier.fillMaxSize()) {
-            // Top Column with radio buttons
+            // Switches to control sorting and filtering
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp)
+                    .padding(start = 16.dp, top = 16.dp)
             ) {
-                Text(
-                    text = "Select an option:",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                )
+                // Row to display "Sort by Name" text and switch on the same line
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Switch(
+                        checked = isSortByNameEnabled.value,
+                        onCheckedChange = { isSortByNameEnabled.value = it },
+                        colors = SwitchDefaults.colors(checkedThumbColor = MaterialTheme.colorScheme.primary)
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
 
+                    Text(
+                        text = "Sort by Name",
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.weight(1f) // Pushes the switch to the right
+                    )
+                }
+                // Row to display "Filter Blanks" text and switch on the same line
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
 
-                // Option 1: Display All
-                RadioOption(
-                    text = "Display All",
-                    value = 1,
-                    selectedOption = selectedOption.value,
-                    onOptionSelected = { selectedOption.value = it }
-                )
-
-                // Option 2: Sort by Name
-                RadioOption(
-                    text = "Sort by Name",
-                    value = 2,
-                    selectedOption = selectedOption.value,
-                    onOptionSelected = { selectedOption.value = it }
-                )
-
-                // Option 3: Filter Blanks
-                RadioOption(
-                    text = "Filter Blanks",
-                    value = 3,
-                    selectedOption = selectedOption.value,
-                    onOptionSelected = { selectedOption.value = it }
-                )
+                    Switch(
+                        checked = isFilterBlanksEnabled.value,
+                        onCheckedChange = { isFilterBlanksEnabled.value = it },
+                        colors = SwitchDefaults.colors(checkedThumbColor = MaterialTheme.colorScheme.primary)
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Text(
+                        text = "Filter Blanks",
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.weight(1f) // Pushes the switch to the right
+                    )
+                }
             }
 
-            // Process listItems based on the selected option
-            val processedItems = when (selectedOption.value) {
-                1 -> listItems // Display all items grouped by listId
-                2 -> listItems
-                    .filter { !it.name.isNullOrBlank() } // Exclude null or blank names for sorting
+            // Process listItems based on the switch states
+            var processedItems = listItems
+
+            // Apply filtering if the "Filter Blanks" switch is enabled
+            if (isFilterBlanksEnabled.value) {
+                processedItems = processedItems.filter { !it.name.isNullOrBlank() }
+            }
+
+            // Apply sorting if the "Sort by Name" switch is enabled
+            if (isSortByNameEnabled.value) {
+                processedItems = processedItems
                     .sortedWith(compareBy<ListItem> { it.listId }.thenBy { extractNumberFromName(it.name) })
-                3 -> listItems.filter { !it.name.isNullOrBlank() } // Filter out items with null or blank names
-                else -> listItems
             }
 
             // Display the list with horizontally scrollable rows
@@ -168,26 +180,6 @@ fun FetchListScreen(
     }
 }
 
-@Composable
-fun RadioOption(
-    text: String,
-    value: Int,
-    selectedOption: Int,
-    onOptionSelected: (Int) -> Unit
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onOptionSelected(value) }
-    ) {
-        RadioButton(
-            selected = selectedOption == value,
-            onClick = { onOptionSelected(value) }
-        )
-        Text(text = text)
-    }
-}
 
 @Composable
 fun ListItemCard(item: ListItem) {
