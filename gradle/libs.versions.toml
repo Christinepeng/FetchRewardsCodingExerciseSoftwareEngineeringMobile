@@ -25,6 +25,8 @@ retrofit = "2.9.0"
 ui = "1.7.3"
 uiTestJunit4 = "1.7.3"
 uiTestManifest = "1.7.3"
+junitKtx = "1.2.1"
+uiTestJunit4Android = "1.7.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -59,6 +61,8 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "uiTestJunit4" }
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "uiTestManifest" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
+androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

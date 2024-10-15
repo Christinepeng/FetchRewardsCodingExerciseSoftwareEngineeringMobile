@@ -72,6 +72,8 @@ dependencies {
 
     // Hilt for Dependency Injection
     implementation(libs.hilt.android.v2511)
+    implementation(libs.androidx.junit.ktx)
+    testImplementation(libs.androidx.ui.test.junit4.android)
     kapt(libs.hilt.android.compiler.v2511)
     implementation (libs.androidx.hilt.navigation.compose)
 
@@ -92,6 +94,25 @@ dependencies {
     testImplementation (libs.mockito.inline)
     testImplementation (libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.core.testing)
+
+
+    // Compose UI testing
+    androidTestImplementation ("androidx.compose.ui:ui-test-junit4:1.5.0")
+    debugImplementation ("androidx.compose.ui:ui-test-manifest:1.5.0")
+
+    // Espresso (for UI testing)
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation ("androidx.test:runner:1.5.2")
+
+    // JUnit extensions
+    androidTestImplementation ("androidx.test.ext:junit:1.1.5'")
+
+    // Mockito for mocking
+    testImplementation ("org.mockito:mockito-core:4.8.1")
+    testImplementation ("org.mockito.kotlin:mockito-kotlin:4.1.0")
+
+    // Coroutines testing
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
 
     // Android Instrumentation Tests
