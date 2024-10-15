@@ -1,6 +1,5 @@
 package com.example.fetchrewardscodingexercisesoftwareengineeringmobile.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fetchrewardscodingexercisesoftwareengineeringmobile.model.ListItem
@@ -32,7 +31,7 @@ class FetchViewModel @Inject constructor(
                 _listItems.value = items
                 _errorMessage.value = null // Clear any previous errors
             } catch (e: Exception) {
-                Log.e("FetchViewModel", "Error fetching list items", e)
+//                Log.e("FetchViewModel", "Error fetching list items", e)
                 _errorMessage.value = "Failed to load data. Please try again."
             }
         }

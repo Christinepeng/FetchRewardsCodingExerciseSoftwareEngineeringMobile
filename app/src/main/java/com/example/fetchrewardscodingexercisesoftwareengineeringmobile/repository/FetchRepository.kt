@@ -10,5 +10,7 @@ class FetchRepository @Inject constructor(private val fetchService: FetchService
 
     suspend fun getListItems(): List<ListItem> {
         return fetchService.getListItems()
+//            .filter { !it.name.isNullOrBlank() }
+//            .sortedWith(compareBy({ it.listId }, { it.name }))
     }
 }
