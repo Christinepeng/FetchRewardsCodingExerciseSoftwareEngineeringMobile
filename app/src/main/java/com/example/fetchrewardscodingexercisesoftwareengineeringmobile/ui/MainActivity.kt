@@ -117,7 +117,6 @@ fun FetchListScreen(
                     Text(
                         text = "Sort by Name",
                         style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.weight(1f) // Pushes the switch to the right
                     )
                 }
                 // Row to display "Filter Blanks" text and switch on the same line
@@ -135,7 +134,6 @@ fun FetchListScreen(
                     Text(
                         text = "Filter Blanks",
                         style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.weight(1f) // Pushes the switch to the right
                     )
                 }
             }
